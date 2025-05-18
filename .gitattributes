@@ -1,0 +1,41 @@
+# =============================
+# 文本文件行结束符统一配置
+# =============================
+*.md text eol=lf        # Markdown 文档
+*.json text eol=lf      # JSON 配置（package.json、vue.config.js 等）
+*.js text eol=lf        # JavaScript 文件
+*.ts text eol=lf        # TypeScript 文件
+*.cjs text eol=lf       # CommonJS 模块
+*.mjs text eol=lf       # ES 模块
+*.vue text eol=lf       # Vue 单文件组件
+*.css text eol=lf       # CSS 样式
+*.scss text eol=lf      # SCSS 样式
+*.sass text eol=lf      # SASS 样式
+*.less text eol=lf      # LESS 样式
+*.html text eol=lf      # HTML 文件
+*.sh text eol=lf        # Shell 脚本
+*.bat text eol=crlf     # Windows 批处理文件
+*.lock text eol=lf      # 依赖锁文件（package-lock.json、yarn.lock）
+
+# =============================
+# 二进制文件明确标记
+# =============================
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.pdf binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+node_modules/** binary  # 依赖目录
+dist/** binary          # 构建输出目录
+build/** binary         # 临时构建目录
+
+# =============================
+# 通用配置（放在末尾）
+# =============================
+* text=auto
