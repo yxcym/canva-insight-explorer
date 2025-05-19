@@ -9,6 +9,7 @@
         <div class="front">
           <div class="image-container">
             <img :src="imgUrl" alt="盲盒封面" class="cover-image">
+            <!-- ？给图片加虚化，上面覆盖礼物样式图标 -->
           </div>
         </div>
         <div class="back">
