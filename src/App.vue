@@ -20,7 +20,7 @@
     
     <div class="support">
       <p class="support-desc">由Canva提供技术支持</p>
-      <img src="wood-texture.jpg" class="support-img" alt="技术支持图标">
+       <img :src="imgPath" class="support-img" alt="技术支持图标">
     </div>
   </div>
 </template>
@@ -34,11 +34,16 @@
 }
 
 .title {
-  color: #0047AB;
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 10px;
   user-select: none; /* 防止标题被选中 */
+
+   /* 文字渐变效果 */
+  background: linear-gradient(90deg, #2cf4ff 0%, #bd42ff 100%);
+  -webkit-background-clip: text; /* webkit 前缀背景裁剪为文字 */
+  -webkit-text-fill-color: transparent; /* 仅保留 webkit 文本填充透明 */
+  background-clip: text; /* 标准背景裁剪属性 */
 }
 
 .desc {
@@ -112,7 +117,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #55e5e0 0%, #408cd8 100%);
+  background: linear-gradient(135deg, #4ff7f2 0%, #2e90f2 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 12px;
@@ -176,10 +181,11 @@ button:hover {
 }
 
 .support-img {
-  width: 100px;
+  width: auto;
   height: 24px;
   object-fit: cover;
   border-radius: 4px;
+  user-select: none; /* 新增：禁止选中图片本身 */
 }
 </style>
 
@@ -190,6 +196,8 @@ export default {
   data() {
     return {
       imgUrl,
+      imgPath: require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo-Static-and-Animations/CHINA - WORDMARK LOGO - GRADIENT - RGB.png'),
+      // 新增：图片路径
       isFlipped: false // 添加翻转状态
     };
   },
