@@ -1,41 +1,467 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://gitee.com">
-    <title>test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Canva创意测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // Canva主蓝色
+                        secondary: '#00B42A', // Canva辅助绿色
+                        accent: '#FF7D00', // 强调色
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .perspective-1000 {
+                perspective: 1000px;
+            }
+            .backface-hidden {
+                backface-visibility: hidden;
+            }
+            .transform-style-3d {
+                transform-style: preserve-3d;
+            }
+            .rotate-y-180 {
+                transform: rotateY(180deg);
+            }
+            .transition-transform {
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                transition-duration: 700ms;
+            }
+            .scale-up {
+                transform: scale(1.05);
+            }
+            .shadow-pop {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="blind-box" onclick="this.classList.toggle('flipped')">
-  <div class="front">
-    <img src="/api/images/raw/master/img/Free-fall.jpg"alt="盲盒封面">
-  </div>
-  <div class="back">
-    <button>开始测试</button>
-  </div>
-</div>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <!-- 主容器 -->
+    <div class="max-w-md mx-auto bg-white shadow-lg overflow-hidden rounded-xl">
+        <!-- 页面1: 盲盒首页 -->
+        <div id="page1" class="p-6 min-h-screen flex flex-col">
+            <!-- 头部信息 -->
+            <div class="pt-8 text-center mb-auto">
+                <h1 class="text-[clamp(1.8rem,5vw,2.5rem)] font-bold text-primary mb-4">发现你的创意天赋</h1>
+                <p class="text-gray-600 mb-6">30秒测试，解锁专属于你的Canva设计模板</p>
+            </div>
+            
+            <!-- 居中的盲盒 -->
+            <div class="flex-grow flex flex-col justify-center items-center cursor-pointer" id="blindBox">
+                <!-- 盲盒动画元素 -->
+                <div class="blind-box-inner relative w-64 h-80 transform-style-3d transition-transform">
+                    <!-- 盲盒正面 -->
+                    <div class="front absolute w-full h-full backface-hidden bg-gradient-to-br from-primary to-primary/80 rounded-xl shadow-lg flex flex-col items-center justify-center p-6">
+                        <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-gift text-5xl text-white"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-2">创意盲盒</h2>
+                        <p class="text-white/90 text-sm">点击开启你的专属设计灵感</p>
+                    </div>
+                    
+                    <!-- 盲盒背面 -->
+                    <div class="back absolute w-full h-full backface-hidden bg-gradient-to-br from-secondary to-secondary/80 rounded-xl shadow-lg flex flex-col items-center justify-center p-6 rotate-y-180">
+                        <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-pencil-ruler text-5xl text-white"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white mb-4">创意测试</h2>
+                        <button id="startBtn" class="bg-white text-secondary font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                            开始测试
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部信息 -->
+            <div class="pb-8 text-center mt-auto">
+                <p class="text-xs text-gray-500 mb-2">由Canva提供技术支持</p>
+                <img src="https://picsum.photos/id/237/120/40" alt="Canva Logo" class="h-8 mx-auto opacity-70">
+            </div>
+        </div>
+        
+        <!-- 页面2-4: 选择题（保持不变） -->
+        <div id="page2" class="p-6 min-h-screen hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold text-primary">第1题 / 3题</h2>
+                <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="w-8 h-full bg-primary rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-6">你最常用设计工具完成以下哪种场景？</h3>
+                
+                <div class="space-y-4">
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q1" value="A" class="mr-3 accent-primary">
+                        <span class="font-medium">校园活动宣传（海报、传单等）</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q1" value="B" class="mr-3 accent-primary">
+                        <span class="font-medium">社交媒体分享（朋友圈、短视频封面）</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q1" value="C" class="mr-3 accent-primary">
+                        <span class="font-medium">学习或工作文档（简历、PPT、报告）</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button id="nextBtn1" class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+        
+        <div id="page3" class="p-6 min-h-screen hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold text-primary">第2题 / 3题</h2>
+                <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="w-16 h-full bg-primary rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-6">你更倾向于哪种设计风格？</h3>
+                
+                <div class="space-y-4">
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q2" value="A" class="mr-3 accent-primary">
+                        <span class="font-medium">简约大气，突出核心信息</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q2" value="B" class="mr-3 accent-primary">
+                        <span class="font-medium">创意个性，富有视觉冲击力</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q2" value="C" class="mr-3 accent-primary">
+                        <span class="font-medium">专业商务，注重排版和配色</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button id="nextBtn2" class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+        
+        <div id="page4" class="p-6 min-h-screen hidden">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-xl font-bold text-primary">第3题 / 3题</h2>
+                <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="w-full h-full bg-primary rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-6">你通常需要设计的频率是？</h3>
+                
+                <div class="space-y-4">
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q3" value="A" class="mr-3 accent-primary">
+                        <span class="font-medium">偶尔需要（每月1-2次）</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q3" value="B" class="mr-3 accent-primary">
+                        <span class="font-medium">经常需要（每周1-3次）</span>
+                    </label>
+                    
+                    <label class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+                        <input type="radio" name="q3" value="C" class="mr-3 accent-primary">
+                        <span class="font-medium">每天都需要（专业需求）</span>
+                    </label>
+                </div>
+            </div>
+            
+            <button id="submitBtn" class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                获取结果 <i class="fa-solid fa-magic ml-2"></i>
+            </button>
+        </div>
+        
+        <!-- 页面5: 结果报告（保持不变） -->
+        <div id="page5" class="p-6 min-h-screen hidden text-center">
+            <div class="pt-8">
+                <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-star text-3xl text-primary"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
+                <p class="text-gray-600 mb-8">根据你的选择，我们为你推荐以下创意类型</p>
+                
+                <!-- 结果卡片 -->
+                <div class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105" id="resultCard">
+                    <div class="h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                        <img id="resultImage" src="https://picsum.photos/id/26/400/300" alt="创意类型" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2" id="resultTag">校园活动海报刚需党</h3>
+                    <p class="text-gray-600 text-sm mb-6" id="resultDesc">适合社团招新、讲座宣传、运动会海报，3分钟快闪模板一键套用</p>
+                    
+                    <a id="templateLink" href="https://www.canva.cn/templates/search/校园海报/" target="_blank" class="inline-block bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 hover:scale-105">
+                        查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="space-y-4 mb-8">
+                    <p class="text-gray-500 text-sm">你可能也喜欢：</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <a href="https://www.canva.cn/templates/search/简历/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+                            <i class="fa-solid fa-file-text text-primary mb-1"></i>
+                            <p class="text-xs">简历模板</p>
+                        </a>
+                        <a href="https://www.canva.cn/templates/search/PPT/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+                            <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
+                            <p class="text-xs">PPT模板</p>
+                        </a>
+                        <a href="https://www.canva.cn/templates/search/朋友圈配图/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+                            <i class="fa-brands fa-weixin text-primary mb-1"></i>
+                            <p class="text-xs">朋友圈</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pb-8">
+                <button id="restartBtn" class="inline-block bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all duration-300">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 预设用户标签及Canva模板链接（共12类）
+        const userTags = [
+            {
+                tag: "校园活动海报刚需党",
+                desc: "适合社团招新、讲座宣传、运动会海报，3分钟快闪模板一键套用",
+                link: "https://www.canva.cn/templates/search/校园海报/",
+                imageId: 26
+            },
+            {
+                tag: "简历美化强迫症患者",
+                desc: "适配实习/校招/留学简历，高颜值模板覆盖极简风/创意风/商务风",
+                link: "https://www.canva.cn/templates/search/简历/",
+                imageId: 28
+            },
+            {
+                tag: "朋友圈美学大师",
+                desc: "节日祝福、日常plog、生日九宫格，自带高级滤镜和文案排版模板",
+                link: "https://www.canva.cn/templates/search/朋友圈配图/",
+                imageId: 29
+            },
+            {
+                tag: "PPT拖延症晚期患者",
+                desc: "课程汇报/答辩/小组作业PPT，动态图表+一键换色模板拯救DDL",
+                link: "https://www.canva.cn/templates/search/PPT/",
+                imageId: 30
+            },
+            {
+                tag: "电商创业萌新店主",
+                desc: "商品主图、详情页、促销海报，支持一键导出电商平台尺寸",
+                link: "https://www.canva.cn/templates/search/电商设计/",
+                imageId: 31
+            },
+            {
+                tag: "手账素材收集控",
+                desc: "电子手账、日程表、读书笔记模板，支持自由拖拽排版",
+                link: "https://www.canva.cn/templates/search/手账/",
+                imageId: 32
+            },
+            {
+                tag: "短视频封面制造机",
+                desc: "抖音/小红书/B站封面，自动适配9:16/16:9等平台尺寸",
+                link: "https://www.canva.cn/templates/search/视频封面/",
+                imageId: 33
+            },
+            {
+                tag: "节日仪式感狂魔",
+                desc: "生日贺卡、节日海报、祝福表情包，含动态贴纸和艺术字体",
+                link: "https://www.canva.cn/templates/search/节日设计/",
+                imageId: 34
+            },
+            {
+                tag: "学习笔记整理达人",
+                desc: "思维导图、错题本、课程表模板，支持导出PDF/图片分享",
+                link: "https://www.canva.cn/templates/search/学习笔记/",
+                imageId: 35
+            },
+            {
+                tag: "职场新人效率党",
+                desc: "周报/月报/工作计划表，含数据可视化图表和商务配色方案",
+                link: "https://www.canva.cn/templates/search/职场文档/",
+                imageId: 36
+            },
+            {
+                tag: "新媒体运营打工人",
+                desc: "公众号封面图、小红书图文、微博长图，内置平台合规尺寸模板",
+                link: "https://www.canva.cn/templates/search/新媒体运营/",
+                imageId: 37
+            },
+            {
+                tag: "生活美学践行者",
+                desc: "家居装饰画、菜单设计、旅行手账，主打文艺清新风格模板",
+                link: "https://www.canva.cn/templates/search/生活设计/",
+                imageId: 38
+            }
+        ];
+
+        // DOM元素
+        const blindBox = document.getElementById('blindBox');
+        const blindBoxInner = blindBox.querySelector('.blind-box-inner');
+        const startBtn = document.getElementById('startBtn');
+        const nextBtn1 = document.getElementById('nextBtn1');
+        const nextBtn2 = document.getElementById('nextBtn2');
+        const submitBtn = document.getElementById('submitBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const resultCard = document.getElementById('resultCard');
+        const resultTag = document.getElementById('resultTag');
+        const resultDesc = document.getElementById('resultDesc');
+        const resultImage = document.getElementById('resultImage');
+        const templateLink = document.getElementById('templateLink');
+        
+        // 页面元素
+        const pages = [
+            document.getElementById('page1'),
+            document.getElementById('page2'),
+            document.getElementById('page3'),
+            document.getElementById('page4'),
+            document.getElementById('page5')
+        ];
+
+        // 显示指定页面，隐藏其他页面
+        function showPage(index) {
+            pages.forEach((page, i) => {
+                if (i === index) {
+                    page.classList.remove('hidden');
+                    // 显示时添加淡入动画
+                    page.classList.add('animate-fadeIn');
+                } else {
+                    page.classList.add('hidden');
+                    page.classList.remove('animate-fadeIn');
+                }
+            });
+        }
+
+        // 盲盒动画
+        blindBox.addEventListener('click', () => {
+            blindBoxInner.classList.toggle('rotate-y-180');
+            // 添加音效（实际项目可替换为真实音效）
+            console.log('播放盲盒开启音效');
+        });
+
+        // 开始测试
+        startBtn.addEventListener('click', () => {
+            showPage(1);
+        });
+
+        // 监听选择题，启用下一步按钮
+        document.querySelectorAll('input[name="q1"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                nextBtn1.disabled = false;
+            });
+        });
+
+        document.querySelectorAll('input[name="q2"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                nextBtn2.disabled = false;
+            });
+        });
+
+        document.querySelectorAll('input[name="q3"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                submitBtn.disabled = false;
+            });
+        });
+
+        // 下一步按钮
+        nextBtn1.addEventListener('click', () => {
+            showPage(2);
+        });
+
+        nextBtn2.addEventListener('click', () => {
+            showPage(3);
+        });
+
+        // 提交答案，生成结果
+        submitBtn.addEventListener('click', () => {
+            // 获取用户选择
+            const q1 = document.querySelector('input[name="q1"]:checked').value;
+            const q2 = document.querySelector('input[name="q2"]:checked').value;
+            const q3 = document.querySelector('input[name="q3"]:checked').value;
+            
+            // 根据用户回答生成结果索引（简化版逻辑）
+            let resultIndex = 0;
+            if (q1 === 'A' && q2 === 'B') {
+                resultIndex = 0; // 校园活动海报刚需党
+            } else if (q1 === 'B' && q2 === 'B') {
+                resultIndex = 2; // 朋友圈美学大师
+            } else if (q1 === 'C' && q3 === 'C') {
+                resultIndex = 3; // PPT拖延症晚期患者
+            } else if (q1 === 'C' && q3 === 'B') {
+                resultIndex = 9; // 职场新人效率党
+            } else if (q1 === 'B' && q3 === 'A') {
+                resultIndex = 6; // 短视频封面制造机
+            } else {
+                // 默认随机选择一个结果
+                resultIndex = Math.floor(Math.random() * userTags.length);
+            }
+            
+            // 显示结果
+            const result = userTags[resultIndex];
+            resultTag.textContent = result.tag;
+            resultDesc.textContent = result.desc;
+            templateLink.href = result.link;
+            resultImage.src = `https://picsum.photos/id/${result.imageId}/400/300`;
+            
+            // 显示结果页
+            showPage(4);
+            
+            // 添加结果卡片动画
+            setTimeout(() => {
+                resultCard.classList.add('scale-up', 'shadow-pop');
+            }, 100);
+        });
+
+        // 重新测试
+        restartBtn.addEventListener('click', () => {
+            // 重置所有选择
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 重置按钮状态
+            nextBtn1.disabled = true;
+            nextBtn2.disabled = true;
+            submitBtn.disabled = true;
+            
+            // 重置盲盒状态
+            blindBoxInner.classList.remove('rotate-y-180');
+            
+            // 回到首页
+            showPage(0);
+        });
+    </script>
 </body>
-<style>
-    .blind-box {
-  width: 300px; height: 400px;
-  perspective: 1000px;
-  cursor: pointer;
-}
-    .blind-box > div {
-  width: 100%; height: 100%;
-  position: absolute;
-  backface-visibility: hidden;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-    .front { background: #165DFF; } /* Canva蓝色 */
-    .back{ 
-          background: #00B42A; /* Canva绿色 */
-          transform: rotateY(180deg);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-}
-.flipped.front{transform: rotateY(180deg); }
-.flipped.back{transform: rotateY(0); }
-</style>
 </html>
+    

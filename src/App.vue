@@ -1,35 +1,59 @@
 <template>
-  <div class="blind-box" @click="toggleFlipped" :class="{ 'is-flipped': isFlipped }">
-    <div class="front">
-      <div class="image-container">
-        <img :src="imgUrl" alt="盲盒封面" class="cover-image">
+  <div class="page-container">
+    <h1 class="title">发现你的创意天赋</h1>
+    <p class="desc">30秒测试，解锁专属于你的Canva设计模板</p>
+    
+    <!-- 新增：包裹容器确保点击区域覆盖整个卡片 -->
+    <div class="blind-box-wrapper" @click="toggleFlipped">
+      <div class="blind-box" :class="{ 'is-flipped': isFlipped }">
+        <div class="front">
+          <div class="image-container">
+            <img :src="imgUrl" alt="盲盒封面" class="cover-image">
+          </div>
+        </div>
+        <div class="back">
+          <!-- 阻止按钮点击触发卡片翻转 -->
+          <button @click.stop>开始测试</button>
+        </div>
       </div>
     </div>
-    <div class="back">
-      <button>开始测试</button>
+    
+    <div class="support">
+      <p class="support-desc">由Canva提供技术支持</p>
+      <img src="wood-texture.jpg" class="support-img" alt="技术支持图标">
     </div>
   </div>
 </template>
 
-<script>
-import imgUrl from '@/assets/img/Free-fall.jpg';
-
-export default {
-  data() {
-    return {
-      imgUrl,
-      isFlipped: false // 添加翻转状态
-    };
-  },
-  methods: {
-    toggleFlipped() {
-      this.isFlipped = !this.isFlipped; // 切换翻转状态
-    }
-  }
-};
-</script>
-
 <style scoped>
+.page-container {
+  text-align: center;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.title {
+  color: #0047AB;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  user-select: none; /* 防止标题被选中 */
+}
+
+.desc {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 40px;
+  user-select: none; /* 防止描述被选中 */
+}
+
+.blind-box-wrapper {
+  position: relative;
+  display: inline-block; /* 确保容器宽度适应内容 */
+  cursor: pointer; /* 明确交互状态 */
+}
+
 .blind-box {
   width: clamp(200px, 30vw, 400px); /* 响应式宽度：最小200px，视口30%，最大400px */
   height: calc(clamp(200px, 30vw, 400px) * 1.33); /* 保持1:1.33比例 */
@@ -55,6 +79,7 @@ export default {
   height: 100%;
   overflow: hidden; /* 防止图片溢出容器 */
   border-radius: 12px; /* 保持与卡片一致的圆角 */
+  user-select: none; /* 新增：禁止选中图片区域 */
 }
 
 .cover-image {
@@ -63,6 +88,7 @@ export default {
   object-fit: cover; /* 保持纵横比并覆盖容器 */
   object-position: center; /* 居中裁剪 */
   transition: transform 0.5s ease; /* 悬停时的微动画 */
+  user-select: none; /* 新增：禁止选中图片本身 */
 }
 
 .front { 
@@ -86,7 +112,7 @@ export default {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #44b6b2 0%, #3c78b4 100%);
+  background: linear-gradient(135deg, #55e5e0 0%, #408cd8 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 12px;
@@ -110,7 +136,7 @@ export default {
 
 button {
   padding: 16px 32px;
-  z-index: 1; /* 确保按钮在磨砂背景之上 */
+  z-index: 1; 
   color: white;
   border: none;
   border-radius: 8px;
@@ -121,6 +147,7 @@ button {
   background: linear-gradient(90deg, #2c82ff 0%, #c942ff 100%);
   background-size: 200% auto;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  user-select: none; /* 禁止选中按钮内的文字 */
 }
 
 button:hover {
@@ -136,4 +163,40 @@ button:hover {
     height: calc(80vw * 1.33);
   }
 }
+
+.support {
+  margin-top: 40px;
+}
+
+.support-desc {
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 5px;
+  user-select: none; /* 防止技术支持文字被选中 */
+}
+
+.support-img {
+  width: 100px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
+}
 </style>
+
+<script>
+import imgUrl from '@/assets/img/Free-fall.jpg';
+
+export default {
+  data() {
+    return {
+      imgUrl,
+      isFlipped: false // 添加翻转状态
+    };
+  },
+  methods: {
+    toggleFlipped() {
+      this.isFlipped = !this.isFlipped; // 切换翻转状态
+    }
+  }
+};
+</script>
