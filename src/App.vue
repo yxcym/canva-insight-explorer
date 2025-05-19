@@ -197,8 +197,7 @@ export default {
   data() {
     return {
       imgUrl,
-      imgPath: require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo-Static-and-Animations/CHINA - WORDMARK LOGO - GRADIENT - RGB.png'),
-      // 新增：图片路径
+      imgPath: require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo Static and Animations/CHINA - WORDMARK LOGO - GRADIENT - RGB.png'),// 新增：图片路径
       isFlipped: false // 添加翻转状态
     };
   },
