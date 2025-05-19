@@ -24,6 +24,37 @@
        <img :src="imgPath" class="support-img" alt="技术支持图标">
     </div>
   </div>
+    <div class="page-container">
+    <!-- 开始页面 -->
+    <div v-show="currentPage === 0" class="p-6 min-h-screen">
+      <div class="blind-box" @click="toggleFlipped">
+        <div class="blind-box-inner" :class="{ 'rotate-y-180': isFlipped }">
+          <div class="front">
+            <div class="image-container">
+              <img src="https://picsum.photos/400/532" alt="盲盒封面" class="cover-image">
+            </div>
+          </div>
+          <div class="back">
+            <button @click="startTest" class="start-btn">开始测试</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 题目页面 -->
+    <div v-show="currentPage >= 1 && currentPage <= 3" class="p-6 min-h-screen">
+      <Question :currentPage="currentPage" 
+                :q1="q1" :q2="q2" :q3="q3"
+                @next="handleNext" 
+                @submit="handleSubmit" />
+    </div>
+
+    <!-- 结果页面 -->
+    <div v-show="currentPage === 4" class="p-6 min-h-screen text-center">
+      <Result :result="result" @restart="restartTest" />
+    </div>
+  </div>
+
 </template>
 
 <style scoped>
@@ -141,6 +172,7 @@
 }
 
 button {
+  /*？新增鼠标触及后略微扩大*/
   padding: 16px 32px;
   z-index: 1; 
   color: white;
