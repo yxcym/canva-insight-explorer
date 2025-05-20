@@ -500,7 +500,7 @@ export default {
           imageId: 38
         }
       ],
-      // 正确位置：题目选项数组应放在data()函数的返回对象中
+      // 题目选项
       q1Options: [
         { value: 'A', text: '校园活动宣传（海报、传单等）' },
         { value: 'B', text: '社交媒体分享（朋友圈、短视频封面）' },
