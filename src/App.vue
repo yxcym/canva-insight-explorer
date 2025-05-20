@@ -152,27 +152,28 @@
         <p class="text-gray-600 mb-8">根据你的选择，我们为你推荐以下创意类型</p>
         
         <div 
-          class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105"
-          id="resultCard"
-        >
-          <div class="h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden">
-            <img 
-              :src="result.imageUrl" 
-              alt="创意类型" 
-              class="w-full h-full object-cover"
-            >
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ result.tag }}</h3>
-          <p class="text-gray-600 text-sm mb-6">{{ result.desc }}</p>
-          
-          <a 
-            :href="result.link" 
-            target="_blank" 
-            class="inline-block bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 hover:scale-105"
-          >
-            查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
-          </a>
-        </div>
+  v-if="result && result.imageUrl" 
+  class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105"
+  id="resultCard"
+>
+  <div class="h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden">
+    <img 
+      :src="result.imageUrl" 
+      alt="创意类型" 
+      class="w-full h-full object-cover"
+    >
+  </div>
+  <h3 class="text-xl font-bold text-gray-800 mb-2">{{ result.tag }}</h3>
+  <p class="text-gray-600 text-sm mb-6">{{ result.desc }}</p>
+  
+  <a 
+    :href="result.link" 
+    target="_blank" 
+    class="inline-block bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 hover:scale-105"
+  >
+    查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
+  </a>
+</div>
         
         <div class="space-y-4 mb-8">
           <p class="text-gray-500 text-sm">你可能也喜欢：</p>
@@ -552,12 +553,12 @@ export default {
       // ...其他条件
       return Math.floor(Math.random() * this.userTags.length);
     },
-    restartTest() {
-      this.currentPage = 0;
-      this.isFlipped = false;
-      this.q1 = this.q2 = this.q3 = null;
-      this.result = null;
-    }
+   restartTest() {
+  this.currentPage = 0;
+  this.isFlipped = false;
+  this.q1 = this.q2 = this.q3 = null;
+  this.result = {}; // 改为空对象而非 null
+}
   }
 };
 </script>
