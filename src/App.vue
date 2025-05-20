@@ -25,9 +25,10 @@
       <div v-show="currentPage === 1" class="p-6 min-h-screen">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-xl font-bold text-primary">第{{currentPage}}题 / 3题</h2>
-          <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div :style="{ width: progressWidth }" class="h-full bg-primary rounded-full transition-all duration-300"></div>
-          </div>
+          <!-- 题目页面进度条部分 -->
+<div class="w-6 h-0.5 bg-gray-200 rounded-full overflow-hidden"> 
+  <div :style="{ width: progressWidth }" class="h-full bg-primary rounded-full transition-all duration-300"></div>
+</div>
         </div>
         
         <div class="mb-8">
@@ -424,6 +425,7 @@ export default {
       result: {}, // 测试结果
       imgUrl, // 直接使用导入的图片路径
       imgPath: require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo Static and Animations/CHINA - WORDMARK LOGO - GRADIENT - RGB.png'),
+      progressWidth: '0px' ,// 新增：初始化进度条宽度
       userTags: [
         {
           tag: "校园活动海报刚需党",
@@ -532,15 +534,14 @@ export default {
       }
     },
     updateProgress() {
-      // 计算已完成题目数
+      // 计算已完成题目数 进度条每完成一题增加1/3（大概是8px/题调试下来最好看）
       const answered = [this.q1, this.q2, this.q3].filter(Boolean).length;
-      // 进度条每完成一题增加1/3（大概是8px/题调试下来最好看）
-      this.progressWidth = answered * 8;
-    },
+  this.progressWidth = `${answered * 8}px`; // 计算并更新进度条宽度
+},
     resetProgress() {
-      [this.q1, this.q2, this.q3] = [null, null, null];
-      this.progressWidth = 0;
-    },
+    [this.q1, this.q2, this.q3] = [null, null, null];
+    this.progressWidth = '0px'; // 明确设置单位
+  },
     handleSubmit() {
       // 计算结果逻辑
       const resultIndex = this.calculateResult();
