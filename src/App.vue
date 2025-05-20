@@ -9,6 +9,7 @@
         <div class="front">
           <div class="image-container">
             <img :src="imgUrl" alt="盲盒封面" class="cover-image">
+            <!-- ？给图片加虚化，上面覆盖礼物样式图标 -->
           </div>
         </div>
         <div class="back">
@@ -22,122 +23,104 @@
       <p class="support-desc">由Canva提供技术支持</p>
       <img :src="imgPath" class="support-img" alt="技术支持图标">
     </div>
-
+    <!-- ？要求界面在点击开始测试后实现换一面的效果，只保留如下元素
+已答题目数/总题目数     在左上角，
+右上角为 做题进度条     每选到一个选项，进度条增加1/3
+中间是题目，选项以及下一步按钮，
+在没有选项选择时，下一步按钮禁用。且变灰色（或者是在有选项被选择后变亮）
+有关内容进行在切换后隐藏
+-->
     <!-- 第1题页面 -->
     <div v-show="currentPage === 1" class="p-6 min-h-screen">
       <div class="flex justify-between items-center mb-8">
-        <h2 class="text-xl font-bold text-primary">第1题 / 3题</h2>
+        <!-- 左上角：已答题目数/总题目数 -->
+        <h2 class="text-xl font-bold text-primary">
+          第{{ currentPage }}题 / 3题
+        </h2>
+
+        <!-- 右上角：动态进度条 -->
         <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div class="w-8 h-full bg-primary rounded-full"></div>
+          <div :style="{ width: (currentPage * 8) + 'px' }"
+            class="h-full bg-primary rounded-full transition-all duration-300"></div>
         </div>
       </div>
-      
+
       <div class="mb-8">
         <h3 class="text-xl font-semibold mb-6">你最常用设计工具完成以下哪种场景？</h3>
-        
+
         <div class="space-y-4">
-          <!-- v-model双向绑定选项 -->
-          <label 
-            v-for="option in q1Options" 
-            :key="option.value" 
-            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300"
-          >
-            <input 
-              type="radio" 
-              name="q1" 
-              :value="option.value" 
-              v-model="q1" 
-              class="mr-3 accent-primary"
-            >
+          <label v-for="option in q1Options" :key="option.value"
+            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+            <input type="radio" name="q1" :value="option.value" v-model="q1" class="mr-3 accent-primary"
+              @change="updateProgress">
+            <!-- // 新增：选项变化时更新进度 -->
             <span class="font-medium">{{ option.text }}</span>
           </label>
         </div>
       </div>
-      
-      <!-- 禁用状态根据q1是否选择 -->
-      <button 
-        @click="handleNext(2)" 
-        :disabled="!q1" 
-        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+
+      <!-- 按钮状态控制：未选择时禁用 -->
+      <button @click="handleNext(2)" :disabled="!q1"
+        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
         下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
       </button>
     </div>
 
-    <!-- 第2题页面（与第1题结构类似，替换q2相关逻辑） -->
+    <!-- 第2题页面（与第1题逻辑一致） -->
     <div v-show="currentPage === 2" class="p-6 min-h-screen">
       <div class="flex justify-between items-center mb-8">
-        <h2 class="text-xl font-bold text-primary">第2题 / 3题</h2>
+        <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
         <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div class="w-16 h-full bg-primary rounded-full"></div>
+          <div :style="{ width: (currentPage * 8) + 'px' }"
+            class="h-full bg-primary rounded-full transition-all duration-300"></div>
         </div>
       </div>
-      
+
       <div class="mb-8">
         <h3 class="text-xl font-semibold mb-6">你更倾向于哪种设计风格？</h3>
-        
+
         <div class="space-y-4">
-          <label 
-            v-for="option in q2Options" 
-            :key="option.value" 
-            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300"
-          >
-            <input 
-              type="radio" 
-              name="q2" 
-              :value="option.value" 
-              v-model="q2" 
-              class="mr-3 accent-primary"
-            >
+          <label v-for="option in q2Options" :key="option.value"
+            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+            <input type="radio" name="q2" :value="option.value" v-model="q2" class="mr-3 accent-primary"
+              @change="updateProgress">
+            <!--  新增：选项变化时更新进度 -->
             <span class="font-medium">{{ option.text }}</span>
           </label>
         </div>
       </div>
-      
-      <button 
-        @click="handleNext(3)" 
-        :disabled="!q2" 
-        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+
+      <button @click="handleNext(3)" :disabled="!q2"
+        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
         下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
       </button>
     </div>
 
-    <!-- 第3题页面（与第1题结构类似，替换q3相关逻辑） -->
+    <!-- 第3题页面 -->
     <div v-show="currentPage === 3" class="p-6 min-h-screen">
       <div class="flex justify-between items-center mb-8">
-        <h2 class="text-xl font-bold text-primary">第3题 / 3题</h2>
+        <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
         <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-          <div class="w-full h-full bg-primary rounded-full"></div>
+          <div :style="{ width: '24px' }" class="h-full bg-primary rounded-full"></div>
         </div>
       </div>
-      
+
       <div class="mb-8">
         <h3 class="text-xl font-semibold mb-6">你通常需要设计的频率是？</h3>
-        
+
         <div class="space-y-4">
-          <label 
-            v-for="option in q3Options" 
-            :key="option.value" 
-            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300"
-          >
-            <input 
-              type="radio" 
-              name="q3" 
-              :value="option.value" 
-              v-model="q3" 
-              class="mr-3 accent-primary"
-            >
+          <label v-for="option in q3Options" :key="option.value"
+            class="block p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-primary hover:bg-primary/5 transition-all duration-300">
+            <input type="radio" name="q3" :value="option.value" v-model="q3" class="mr-3 accent-primary"
+              @change="updateProgress">
+            <!-- 新增：选项变化时更新进度 -->
             <span class="font-medium">{{ option.text }}</span>
           </label>
         </div>
       </div>
-      
-      <button 
-        @click="handleSubmit" 
-        :disabled="!q3" 
-        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+
+      <button @click="handleSubmit" :disabled="!q3"
+        class="w-full bg-primary text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
         获取结果 <i class="fa-solid fa-magic ml-2"></i>
       </button>
     </div>
@@ -150,55 +133,54 @@
         </div>
         <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
         <p class="text-gray-600 mb-8">根据你的选择，我们为你推荐以下创意类型</p>
-        
-        <div 
+
+        <div
           class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105"
-          id="resultCard"
-        >
+          id="resultCard">
           <div class="h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden">
-            <img 
-              :src="result.imageUrl" 
-              alt="创意类型" 
-              class="w-full h-full object-cover"
-            >
+            <img :src="result.imageUrl" alt="创意类型" class="w-full h-full object-cover">
           </div>
           <h3 class="text-xl font-bold text-gray-800 mb-2">{{ result.tag }}</h3>
           <p class="text-gray-600 text-sm mb-6">{{ result.desc }}</p>
-          
-          <a 
-            :href="result.link" 
-            target="_blank" 
-            class="inline-block bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 hover:scale-105"
-          >
+
+          <a :href="result.link" target="_blank"
+            class="inline-block bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-secondary/90 hover:shadow-xl transition-all duration-300 hover:scale-105">
             查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
           </a>
         </div>
-        
+
         <div class="space-y-4 mb-8">
           <p class="text-gray-500 text-sm">你可能也喜欢：</p>
           <div class="grid grid-cols-3 gap-3">
-            <a 
-              href="https://www.canva.cn/templates/search/简历/" 
-              target="_blank" 
-              class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors"
-            >
+            <a href="https://www.canva.cn/templates/search/简历/" target="_blank"
+              class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
               <i class="fa-solid fa-file-text text-primary mb-1"></i>
               <p class="text-xs">简历模板</p>
             </a>
-            <!-- 其他推荐链接保持不变 -->
+            <a href="https://www.canva.cn/templates/search/PPT/" target="_blank"
+              class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+              <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
+              <p class="text-xs">PPT模板</p>
+            </a>
+            <a href="https://www.canva.cn/templates/search/朋友圈配图/" target="_blank"
+              class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+              <i class="fa-brands fa-weixin text-primary mb-1"></i>
+              <p class="text-xs">朋友圈</p>
+            </a>
+
+          </div>
+
+
+          <div class="pb-8">
+            <button @click="restartTest"
+              class="inline-block bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all duration-300">
+              <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
+            </button>
           </div>
         </div>
       </div>
-      
-      <div class="pb-8">
-        <button 
-          @click="restartTest" 
-          class="inline-block bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all duration-300"
-        >
-          <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
-        </button>
-      </div>
     </div>
+    <!-- 结果页面结束 -->
   </div>
 </template>
 
@@ -513,10 +495,24 @@ export default {
     },
     startTest() {
       this.currentPage = 1;
-      this.isFlipped = false; // 翻转后回到正面
+      this.isFlipped = false; // 翻转回正面
+      this.resetProgress(); // 重置进度
     },
     handleNext(page) {
-      this.currentPage = page;
+      if (this.currentPage === 1 && this.q1 || this.currentPage === 2 && this.q2 || this.currentPage === 3 && this.q3) {
+        this.currentPage = page;
+        this.updateProgress(); // 切换页面时更新进度
+      }
+    },
+    updateProgress() {
+      // 计算已完成题目数
+      const answered = [this.q1, this.q2, this.q3].filter(Boolean).length;
+      // 进度条每完成一题增加1/3（8px/题）
+      this.progressWidth = answered * 8;
+    },
+    resetProgress() {
+      [this.q1, this.q2, this.q3] = [null, null, null];
+      this.progressWidth = 0;
     },
     handleSubmit() {
       // 计算结果逻辑
@@ -535,7 +531,7 @@ export default {
       this.isFlipped = false;
       this.q1 = this.q2 = this.q3 = null;
       this.result = null;
-    } 
+    }
   }
 };
 </script>
