@@ -1,245 +1,258 @@
 <template>
   <div class="page-container">
-    <!-- 初始界面 - 点击开始测试后隐藏 -->
+    <!-- 初始界面 -->
     <div v-show="currentPage === 0" class="initial-screen">
       <h1 class="title">发现你的创意天赋</h1>
       <p class="desc">30秒测试，解锁专属于你的Canva设计模板</p>
       <div class="blind-box-wrapper" @click="toggleFlipped">
         <div class="blind-box" :class="{ 'is-flipped': isFlipped }">
           <div class="front">
-            <div class="image-container">
-              <img :src="imgUrl" alt="盲盒封面" class="cover-image">
-              <!-- 图片虚化和图标覆盖 -->
-              <div class="absolute inset-0 bg-black/50 rounded-lg"></div>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <i class="fa-solid fa-gift text-4xl text-white opacity-70"></i>
+            <div class="image-container relative rounded-xl overflow-hidden">
+              <img :src="imgUrl" alt="盲盒封面" class="cover-image w-full h-full object-cover">
+              <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <i class="fa-solid fa-gift text-white text-5xl opacity-80"></i>
               </div>
             </div>
           </div>
-          <div class="back">
-            <button @click="startTest" class="start-btn bg-blue-700 hover:bg-blue-800">开始测试</button>
+          <div class="back flex items-center justify-center">
+            <button @click="startTest" class="start-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
+              开始测试
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 测试界面 - 点击开始测试后显示 -->
-    <div v-show="currentPage >= 1 && currentPage <= 3" class="test-screen">
-      <!-- 第1题页面 -->
-      <div v-show="currentPage === 1" class="p-6 min-h-screen">
-        <div class="flex justify-center mb-8">
-          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
+    <!-- 测试界面 -->
+    <div v-show="currentPage >= 1 && currentPage <= 3" class="test-screen p-6 min-h-screen">
+      <!-- 第1题 -->
+      <div v-show="currentPage === 1">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
+          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
+            <div class="bg-primary h-2 rounded-full" :style="{ width: '33%' }"></div>
+          </div>
+          <span class="text-gray-500 text-sm">33%</span>
         </div>
+        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-6">你最常用设计工具完成以下哪种场景？</h3>
-          <div class="flex flex-col space-y-3">
+          <h3 class="text-xl font-semibold mb-4">你最常用设计工具完成以下哪种场景？</h3>
+          <div class="space-y-3">
             <label 
               v-for="option in q1Options" 
               :key="option.value" 
-              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-700 bg-blue-50': q1 === option.value }"
+              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-600 bg-blue-50': q1 === option.value }"
             >
               <input 
                 type="radio" 
                 name="q1" 
                 :value="option.value" 
                 v-model="q1" 
-                class="mr-4 accent-blue-700" 
+                class="mt-1 accent-blue-600" 
                 @change="updateProgress"
-              ><!-- 单选框填充色 -->
-              <span class="font-medium flex-1">{{ option.text }}</span>
+              >
+              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
             </label>
           </div>
         </div>
+        
         <button 
           @click="handleNext(2)" 
           :disabled="!q1" 
-          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl" 
-        ><!-- 按钮颜色 -->
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
+        >
           下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
         </button>
       </div>
 
-      <!-- 第2题页面 -->
-      <div v-show="currentPage === 2" class="p-6 min-h-screen">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
+      <!-- 第2题 -->
+      <div v-show="currentPage === 2">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
+          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
+            <div class="bg-primary h-2 rounded-full" :style="{ width: '66%' }"></div>
+          </div>
+          <span class="text-gray-500 text-sm">66%</span>
         </div>
+        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-6">你更倾向于哪种设计风格？</h3>
-          <div class="flex flex-col space-y-3">
+          <h3 class="text-xl font-semibold mb-4">你更倾向于哪种设计风格？</h3>
+          <div class="space-y-3">
             <label 
               v-for="option in q2Options" 
               :key="option.value" 
-              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-700 bg-blue-50': q2 === option.value }"
+              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-600 bg-blue-50': q2 === option.value }"
             >
               <input 
                 type="radio" 
                 name="q2" 
                 :value="option.value" 
                 v-model="q2" 
-                class="mr-4 accent-blue-700" 
+                class="mt-1 accent-blue-600" 
                 @change="updateProgress"
-              ><!-- 单选框填充色 -->
-              <span class="font-medium flex-1">{{ option.text }}</span>
+              >
+              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
             </label>
           </div>
         </div>
+        
         <button 
           @click="handleNext(3)" 
           :disabled="!q2" 
-          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300"
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
         >
           下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
         </button>
       </div>
 
-      <!-- 第3题页面 -->
-      <div v-show="currentPage === 3" class="p-6 min-h-screen">
-        <div class="flex justify-between items-center mb-8">
-          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
+      <!-- 第3题 -->
+      <div v-show="currentPage === 3">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
+          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
+            <div class="bg-primary h-2 rounded-full" :style="{ width: '100%' }"></div>
+          </div>
+          <span class="text-gray-500 text-sm">100%</span>
         </div>
+        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-6">你通常需要设计的频率是？</h3>
-          <div class="flex flex-col space-y-3">
+          <h3 class="text-xl font-semibold mb-4">你通常需要设计的频率是？</h3>
+          <div class="space-y-3">
             <label 
               v-for="option in q3Options" 
               :key="option.value" 
-              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-700 bg-blue-50': q3 === option.value }"
+              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-600 bg-blue-50': q3 === option.value }"
             >
               <input 
                 type="radio" 
                 name="q3" 
                 :value="option.value" 
                 v-model="q3" 
-                class="mr-4 accent-blue-700" 
+                class="mt-1 accent-blue-600" 
                 @change="updateProgress"
-              ><!-- 单选框填充色 -->
-              <span class="font-medium flex-1">{{ option.text }}</span>
+              >
+              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
             </label>
           </div>
         </div>
+        
         <button 
           @click="handleSubmit" 
           :disabled="!q3" 
-          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300"
+          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
         >
           获取结果 <i class="fa-solid fa-magic ml-2"></i>
         </button>
       </div>
     </div>
 
-     <!-- 结果页面 -->
+    <!-- 结果页面 -->
     <div v-show="currentPage === 4" class="result-screen p-6 min-h-screen text-center">
       <div class="pt-8">
         <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
           <i class="fa-solid fa-star text-3xl text-primary"></i>
         </div>
         <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
-        <p class="text-gray-600 mb-8">根据你的选择，我们为你推荐以下创意类型</p>
+        <p class="text-gray-600 mb-4">根据你的选择，我们为你推荐以下创意类型</p>
         
-      
-      <!-- 结果卡片（适配原有代码结构，添加默认占位逻辑） -->
-<div 
-  v-if="result" 
-  class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105"
-  id="resultCard"
->
-  <!-- 图片部分：保留原有class，添加默认占位图 -->
-  <img 
-    :src="result.imageUrl || require('@/assets\\Canva-Theme-based-Design Materials-3.3\\Logo Static and Animations\\Canva-CN-Gradient.gif')" 
-    alt="创意类型" 
-    class="w-full h-64 object-cover rounded-t-xl mb-4"
-  ><!-- 优先使用本地占位图 -->
-  
-  <!-- tag部分：保留加粗和原有样式，添加默认文本 -->
-  <h3 class="text-xl font-bold text-gray-800 mb-2">
-    {{ result.tag || '你的创意标签' }} <!-- 自定义默认标签文本 -->
-  </h3>
-  
-  <!-- desc部分：保留原有样式，添加默认描述 -->
-  <p class="text-gray-600 text-base mb-6">
-    {{ result.desc || '点击下方按钮查看专属设计模板' }} <!-- 自定义默认描述 -->
-  </p>
-  
-  <!-- 按钮部分：保留原有样式和逻辑，添加默认链接 -->
-  <a 
-  :href="result.link || '#'" 
-  target="_blank" 
-  class="inline-block bg-gradient-to-r from-cyan-500 to-green-500 text-white font-bold py-3 px-8 rounded-full shadow-08px-30px-cyan-green hover:from-cyan-600 hover:to-green-600 transition-all duration-300 hover:scale-105"
->
-  查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
-</a>
-</div>
-      
-      <div class="space-y-4 mb-8">
-        <p class="text-gray-500 text-sm">你可能也喜欢：</p>
-        <div class="grid grid-cols-3 gap-3">
-          <a href="https://www.canva.cn/templates/search/简历/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-            <i class="fa-solid fa-file-text text-primary mb-1"></i>
-            <p class="text-xs">简历模板</p>
-          </a>
-          <a href="https://www.canva.cn/templates/search/PPT/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-            <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
-            <p class="text-xs">PPT模板</p>
-          </a>
-          <a href="https://www.canva.cn/templates/search/朋友圈配图/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-            <i class="fa-brands fa-weixin text-primary mb-1"></i>
-            <p class="text-xs">朋友圈</p>
+        <div 
+          v-if="result" 
+          class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-[1.02]"
+        >
+          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ result.tag || '新媒体运营打工人' }}</h3>
+          <p class="text-gray-600 text-base mb-6">{{ result.desc || '公众号封面图、小红书图文、微博长图，内置平台合规尺寸模板' }}</p>
+          
+          <a 
+            :href="result.link || '#'" 
+            target="_blank" 
+            class="inline-block bg-gradient-to-r from-cyan-500 to-green-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:from-cyan-600 hover:to-green-600 transition-all duration-300 hover:scale-105"
+          >
+            查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
           </a>
         </div>
-      </div>
-      
-      <div class="pb-8">
+        
+        <div class="space-y-4 mb-8">
+          <p class="text-gray-500 text-sm">你可能也喜欢：</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+              <i class="fa-solid fa-file-text text-primary mb-1"></i>
+              <p class="text-xs">简历模板</p>
+            </a>
+            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+              <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
+              <p class="text-xs">PPT模板</p>
+            </a>
+            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+              <i class="fa-brands fa-weixin text-primary mb-1"></i>
+              <p class="text-xs">朋友圈</p>
+            </a>
+          </div>
+        </div>
+        
         <button 
           @click="restartTest" 
-          class="inline-block bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all duration-300"
+          class="inline-block bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-3 px-6 rounded-full hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 shadow-md"
         >
           <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
         </button>
       </div>
-    </div>
-  </div>
-
-    <div class="support">
-      <p class="support-desc">由Canva提供技术支持</p>
-      <img :src="imgPath" class="support-img" alt="技术支持图标">
+      
+      <div class="support mt-8">
+        <p class="support-desc">由Canva提供技术支持</p>
+        <img :src="imgPath" class="support-img" alt="技术支持图标">
+      </div>
     </div>
   </div>
 </template>
+
 <!-- ？目前果展示界面存在以下问题：界面上两个展示区域（类似盒子）在交界处隔离感明显；“查看专属模板” 按钮被遮挡，未能正常显示在可视层面；两个展示区域体积过大，视觉上显得臃肿。
 针对这些问题，下一步计划如下：将两个展示区域合并为一个整体；保留展示区域内的 tag、desc 以及 “查看专属模板” 按钮，其余内容下移至下方空白区域进行重新布局 。 -->
-<style scoped>
 
+<style scoped>
+/* 蓝绿色阴影定义 */
 @layer utilities {
   .shadow-08px-30px-cyan-green {
-    box-shadow: 0 8px 30px rgba(44, 182, 178, 0.25); /* 蓝绿色阴影 */
+    box-shadow: 0 8px 30px rgba(44, 182, 178, 0.25);
   }
+}
+
+.space-y-4 {
+  margin-top: 0;
+  /* 重置间距 */
 }
 
 #resultCard {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 24px;
+  /* 减少内边距，使卡片不臃肿 */
+  margin-bottom: 16px;
+  /* 调整与下方内容间距 */
 }
 
 #resultCard img {
   width: 100%;
-  height: 200px; /* 可根据实际调整图片高度 */
+  height: 200px;
+  /* 可根据实际调整图片高度 */
   object-fit: cover;
-  border-radius: 8px 8px 0 0; /* 仅顶部圆角 */
+  border-radius: 8px 8px 0 0;
+  /* 仅顶部圆角 */
   margin-bottom: 12px;
 }
 
 #resultCard h3 {
-  margin: 0 0 8px 0; /* 调整 tag 上下间距 */
+  margin: 0 0 8px 0;
+  /* 调整 tag 上下间距 */
 }
 
 #resultCard p {
   text-align: center;
-  margin: 0 0 16px 0; /* 调整 desc 上下间距 */
+  margin: 0 0 16px 0;
+  /* 调整 desc 上下间距 */
 }
 
 .page-container {
@@ -255,8 +268,8 @@
   margin-bottom: 10px;
   user-select: none;
   /* 防止标题被选中 */
-  background: linear-gradient(90deg, #2cf4ff 0%, #bd42ff 100%); 
-   /* 文字渐变效果 */
+  background: linear-gradient(90deg, #2cf4ff 0%, #bd42ff 100%);
+  /* 文字渐变效果 */
   -webkit-background-clip: text;
   /* webkit 前缀背景裁剪为文字 */
   -webkit-text-fill-color: transparent;
@@ -409,14 +422,15 @@ button:hover {
 }
 
 .retry-button {
-    margin-bottom: 16px; /* 根据需要调整数值，这里以 16px 为例 */
-    background: linear-gradient(90deg, #2c82ff 0%, #c942ff 100%);
-    background-size: 200% auto;
+  margin-bottom: 16px;
+  /* 根据需要调整数值，这里以 16px 为例 */
+  background: linear-gradient(90deg, #2c82ff 0%, #c942ff 100%);
+  background-size: 200% auto;
 }
 
 /* 小屏幕优化 */
 @media (max-width: 600px) {
- .blind-box {
+  .blind-box {
     width: 80vw;
     height: calc(80vw * 1.33);
   }
@@ -461,7 +475,7 @@ button:hover {
 }
 
 .test-screen label input[type="radio"] {
-accent-color: #54cfff;
+  accent-color: #54cfff;
 }
 
 .test-screen label span {
@@ -507,14 +521,13 @@ accent-color: #54cfff;
 /* 响应式调整 */
 @media (max-width: 768px) {
   .result-screen .grid {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
   }
 }
-  
-  .result-screen h2 {
-    font-size: 1.5rem;
-  }
 
+.result-screen h2 {
+  font-size: 1.5rem;
+}
 </style>
 
 <script>
@@ -634,7 +647,7 @@ export default {
       // 仅当当前页答案存在时切换
       if (this.currentPage === 1 && this.q1 || this.currentPage === 2 && this.q2 || this.currentPage === 3 && this.q3) {
         this.currentPage = page;
-         // 移除了进度条更新
+        // 移除了进度条更新
       }
     },
     handleSubmit() {
