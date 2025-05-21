@@ -9,8 +9,11 @@
           <div class="front">
             <div class="image-container">
               <img :src="imgUrl" alt="盲盒封面" class="cover-image">
-              <!--  ？给图片加虚化，上面覆盖礼物样式图标 
-                解决方法：引入矢量图标库，简化图标开发（如盲盒的礼物图标<i class="fa-solid fa-gift"></i>）。-->
+              <!-- 图片虚化和图标覆盖 -->
+              <div class="absolute inset-0 bg-black/50 rounded-lg"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <i class="fa-solid fa-gift text-4xl text-white opacity-70"></i>
+              </div>
             </div>
           </div>
           <div class="back">
@@ -129,81 +132,74 @@
     </div>
 
      <!-- 结果页面 -->
-  <div v-show="currentPage === 4" class="result-screen p-6 min-h-screen text-center">
-    <div class="pt-12">
-      <!-- 顶部图标 -->
-      <div class="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-8">
-        <i class="fa-solid fa-star text-4xl text-primary"></i>
-      </div>
-
-      <!-- 标题和说明 -->
-      <h2 class="text-2xl font-bold text-primary mb-4">恭喜完成测试！</h2>
-      <p class="text-gray-600 mb-8 max-w-lg mx-auto">
-        根据你的选择，我们为你推荐以下创意类型
-      </p>
-
-      <!-- 结果卡片 -->
-      <div 
-        v-if="result && result.imageUrl" 
-        class="bg-white rounded-2xl shadow-2xl p-8 mb-12 transform transition-all duration-300 hover:scale-102 hover:shadow-3xl"
-        id="resultCard"
-      >
-        <div class="h-64 bg-gray-100 rounded-lg mb-6 overflow-hidden">
-          <img 
-            :src="result.imageUrl" 
-            alt="创意类型" 
-            class="w-full h-full object-cover rounded-lg"
-          >
+    <div v-show="currentPage === 4" class="result-screen p-6 min-h-screen text-center">
+      <div class="pt-8">
+        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fa-solid fa-star text-3xl text-primary"></i>
         </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ result.tag }}</h3>
-        <p class="text-gray-600 text-base mb-6">{{ result.desc }}</p>
+        <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
+        <p class="text-gray-600 mb-8">根据你的选择，我们为你推荐以下创意类型</p>
         
-        <a 
-          :href="result.link" 
-          target="_blank" 
-          class="bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-md hover:bg-blue-800 hover:shadow-lg transition-all duration-200"
-        >
-          查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
-        </a>
-      </div>
-
-      <!-- 推荐内容 -->
-      <div class="space-y-6 mb-12">
-  <p class="text-gray-500 text-lg">你可能也喜欢：</p>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <a 
-      href="#" 
-      target="_blank" 
-      class="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors"
-    >
-      <i class="fa-solid fa-file-text text-primary text-2xl mb-2"></i>
-      <p class="text-sm">简历模板</p>
-    </a>
-    <a 
-      href="#" 
-      target="_blank" 
-      class="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors"
-    >
-      <i class="fa-solid fa-presentation-screen text-primary text-2xl mb-2"></i>
-      <p class="text-sm">PPT模板</p>
-    </a>
-    <a 
-      href="#" 
-      target="_blank" 
-      class="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors"
-    >
-      <i class="fa-brands fa-weixin text-primary text-2xl mb-2"></i>
-      <p class="text-sm">朋友圈</p>
-    </a>
-  </div>
+      
+      <!-- 结果卡片（适配原有代码结构，添加默认占位逻辑） -->
+<div 
+  v-if="result" 
+  class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-105"
+  id="resultCard"
+>
+  <!-- 图片部分：保留原有class，添加默认占位图 -->
+  <img 
+    :src="result.imageUrl || require('@/assets\\Canva-Theme-based-Design Materials-3.3\\Logo Static and Animations\\Canva-CN-Gradient.gif')" 
+    alt="创意类型" 
+    class="w-full h-64 object-cover rounded-t-xl mb-4"
+  ><!-- 优先使用本地占位图 -->
+  
+  <!-- tag部分：保留加粗和原有样式，添加默认文本 -->
+  <h3 class="text-xl font-bold text-gray-800 mb-2">
+    {{ result.tag || '你的创意标签' }} <!-- 自定义默认标签文本 -->
+  </h3>
+  
+  <!-- desc部分：保留原有样式，添加默认描述 -->
+  <p class="text-gray-600 text-base mb-6">
+    {{ result.desc || '点击下方按钮查看专属设计模板' }} <!-- 自定义默认描述 -->
+  </p>
+  
+  <!-- 按钮部分：保留原有样式和逻辑，添加默认链接 -->
+  <a 
+  :href="result.link || '#'" 
+  target="_blank" 
+  class="inline-block bg-gradient-to-r from-cyan-500 to-green-500 text-white font-bold py-3 px-8 rounded-full shadow-08px-30px-cyan-green hover:from-cyan-600 hover:to-green-600 transition-all duration-300 hover:scale-105"
+>
+  查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
+</a>
 </div>
-      <!-- 重新测试按钮 -->
-      <button 
-        @click="restartTest" 
-        class="inline-block bg-gray-200 text-gray-800 font-bold py-3 px-8 rounded-full hover:bg-gray-300 transition-all duration-200"
-      >
-        <i class="fa-solid fa-rotate-left mr-3"></i> 重新测试
-      </button>
+      
+      <div class="space-y-4 mb-8">
+        <p class="text-gray-500 text-sm">你可能也喜欢：</p>
+        <div class="grid grid-cols-3 gap-3">
+          <a href="https://www.canva.cn/templates/search/简历/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+            <i class="fa-solid fa-file-text text-primary mb-1"></i>
+            <p class="text-xs">简历模板</p>
+          </a>
+          <a href="https://www.canva.cn/templates/search/PPT/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+            <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
+            <p class="text-xs">PPT模板</p>
+          </a>
+          <a href="https://www.canva.cn/templates/search/朋友圈配图/" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+            <i class="fa-brands fa-weixin text-primary mb-1"></i>
+            <p class="text-xs">朋友圈</p>
+          </a>
+        </div>
+      </div>
+      
+      <div class="pb-8">
+        <button 
+          @click="restartTest" 
+          class="inline-block bg-gray-200 text-gray-800 font-bold py-2 px-6 rounded-full hover:bg-gray-300 transition-all duration-300"
+        >
+          <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
+        </button>
+      </div>
     </div>
   </div>
 
@@ -213,8 +209,38 @@
     </div>
   </div>
 </template>
-
+<!-- ？目前果展示界面存在以下问题：界面上两个展示区域（类似盒子）在交界处隔离感明显；“查看专属模板” 按钮被遮挡，未能正常显示在可视层面；两个展示区域体积过大，视觉上显得臃肿。
+针对这些问题，下一步计划如下：将两个展示区域合并为一个整体；保留展示区域内的 tag、desc 以及 “查看专属模板” 按钮，其余内容下移至下方空白区域进行重新布局 。 -->
 <style scoped>
+
+@layer utilities {
+  .shadow-08px-30px-cyan-green {
+    box-shadow: 0 8px 30px rgba(44, 182, 178, 0.25); /* 蓝绿色阴影 */
+  }
+}
+
+#resultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#resultCard img {
+  width: 100%;
+  height: 200px; /* 可根据实际调整图片高度 */
+  object-fit: cover;
+  border-radius: 8px 8px 0 0; /* 仅顶部圆角 */
+  margin-bottom: 12px;
+}
+
+#resultCard h3 {
+  margin: 0 0 8px 0; /* 调整 tag 上下间距 */
+}
+
+#resultCard p {
+  text-align: center;
+  margin: 0 0 16px 0; /* 调整 desc 上下间距 */
+}
 
 .page-container {
   text-align: center;
@@ -380,6 +406,12 @@ button:hover {
   background-position: right center;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(122, 36, 255, 0.25);
+}
+
+.retry-button {
+    margin-bottom: 16px; /* 根据需要调整数值，这里以 16px 为例 */
+    background: linear-gradient(90deg, #2c82ff 0%, #c942ff 100%);
+    background-size: 200% auto;
 }
 
 /* 小屏幕优化 */
