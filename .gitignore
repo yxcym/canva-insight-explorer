@@ -1,23 +1,93 @@
-.DS_Store
+# =============================
+# 依赖与构建产物
+# =============================
 node_modules
-/dist
+node_modules/  # npm/yarn/pnpm 等包管理器依赖
+dist/                 # 生产构建输出
+build/                # 编译输出目录
+public/               # 公共资源目录（根据项目调整）
+lib/                  # 库文件输出
+out/                  # 编译输出目录
+coverage/             # 测试覆盖率报告
+.npm/                 # npm 缓存
+.yarn/                # yarn 缓存
+.pnpm-store/          # pnpm 缓存
+*.tgz                 # npm 打包文件
+package-lock.json     # npm 锁文件（可选保留）
+yarn.lock             # yarn 锁文件（可选保留）
+pnpm-lock.yaml        # pnpm 锁文件（可选保留）
 
+# =============================
+# 压缩文件
+# =============================
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+*.bz2
+*.xz
+*.lz4
+*.lzop
+*.lzma
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.tar.lz4
+*.tar.zst
+*.tar.lzo
+*.tar.lzop
+*.tar.lzma
 
-# local env files
-.env.local
-.env.*.local
+# =============================
+# IDE/编辑器配置
+# =============================
+.idea/                # IntelliJ IDEA
+.vscode/              # VS Code
+.vs/                  # Visual Studio
+*.suo                 # Visual Studio 文件
+*.swp                 # Vim 交换文件
+*.swo                 # Vim 交换文件
+*.swn                 # Vim 交换文件
+*.swm                 # Vim 交换文件
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+# =============================
+# 环境变量
+# =============================
+.env*                 # 环境配置
+!.env.example         # 示例环境变量（提交作为模板）
+*.local              # 本地配置文件
 
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# =============================
+# 测试文件
+# =============================
+cypress/videos/       # Cypress 测试视频
+cypress/screenshots/  # Cypress 测试截图
+.jest-cache/          # Jest 缓存
+*.test.*              # 测试文件（JS/TS/JSX/TSX）
+*.spec.*              # 测试文件（JS/TS/JSX/TSX）
+*.snap                # Jest 快照文件
+
+# =============================
+# 操作系统文件
+# =============================
+.DS_Store             # macOS 文件
+Thumbs.db             # Windows 文件
+ehthumbs.db           # Windows 文件
+Icon?                 # macOS 文件
+._*                   # macOS 文件
+.Spotlight-V100       # macOS 文件
+.Trashes              # macOS 文件
+.VolumeIcon.icns      # macOS 文件
+.AppleDouble          # macOS 文件
+.LSOverride           # macOS 文件
+.DocumentRevisions-V100 # macOS 文件
+.TemporaryItems       # macOS 文件
+
+# =============================
+# 临时文件
+# =============================
+*.log                 # 日志文件
+*.tmp                 # 临时文件
+*.bak                 # 备份文件
+*.orig                # 原始文件
