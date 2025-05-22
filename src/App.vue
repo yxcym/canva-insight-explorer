@@ -1,209 +1,155 @@
 <template>
   <div class="page-container">
-    <!-- 初始界面 -->
+    <!-- 初始界面 - 点击开始测试后隐藏 -->
     <div v-show="currentPage === 0" class="initial-screen">
       <h1 class="title">发现你的创意天赋</h1>
       <p class="desc">30秒测试，解锁专属于你的Canva设计模板</p>
       <div class="blind-box-wrapper" @click="toggleFlipped">
         <div class="blind-box" :class="{ 'is-flipped': isFlipped }">
           <div class="front">
-            <div class="image-container relative rounded-xl overflow-hidden">
-              <img :src="imgUrl" alt="盲盒封面" class="cover-image w-full h-full object-cover">
-              <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <i class="fa-solid fa-gift text-white text-5xl opacity-80"></i>
+            <div class="image-container">
+              <img :src="imgUrl" alt="盲盒封面" class="cover-image">
+              <div class="absolute inset-0 bg-black/50 rounded-lg"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <i class="fa-solid fa-gift text-4xl text-white opacity-70"></i>
               </div>
             </div>
           </div>
-          <div class="back flex items-center justify-center">
-            <button @click="startTest" class="start-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105">
-              开始测试
-            </button>
+          <div class="back">
+            <button @click="startTest" class="start-btn bg-blue-700 hover:bg-blue-800">开始测试</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 测试界面 -->
-    <div v-show="currentPage >= 1 && currentPage <= 3" class="test-screen p-6 min-h-screen">
-      <!-- 第1题 -->
-      <div v-show="currentPage === 1">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
-          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
-            <div class="bg-primary h-2 rounded-full" :style="{ width: '33%' }"></div>
-          </div>
-          <span class="text-gray-500 text-sm">33%</span>
+    <!-- 测试界面 - 点击开始测试后显示 -->
+    <div v-show="currentPage >= 1 && currentPage <= 3" class="test-screen">
+      <!-- 第1题页面 -->
+      <div v-show="currentPage === 1" class="p-6 min-h-screen">
+        <div class="flex justify-center mb-8">
+          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
         </div>
-        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-4">你最常用设计工具完成以下哪种场景？</h3>
-          <div class="space-y-3">
-            <label 
-              v-for="option in q1Options" 
-              :key="option.value" 
-              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-600 bg-blue-50': q1 === option.value }"
-            >
-              <input 
-                type="radio" 
-                name="q1" 
-                :value="option.value" 
-                v-model="q1" 
-                class="mt-1 accent-blue-600" 
-                @change="updateProgress"
-              >
-              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
+          <h3 class="text-xl font-semibold mb-6">你最常用设计工具完成以下哪种场景？</h3>
+          <div class="flex flex-col space-y-3">
+            <label v-for="option in q1Options" :key="option.value"
+              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-700 bg-blue-50': q1 === option.value }">
+              <input type="radio" name="q1" :value="option.value" v-model="q1" class="mr-4 accent-blue-700"
+                @change="updateProgress">
+              <span class="font-medium flex-1">{{ option.text }}</span>
             </label>
           </div>
         </div>
-        
-        <button 
-          @click="handleNext(2)" 
-          :disabled="!q1" 
-          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
-        >
+        <button @click="handleNext(2)" :disabled="!q1"
+          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
           下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
         </button>
       </div>
 
-      <!-- 第2题 -->
-      <div v-show="currentPage === 2">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
-          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
-            <div class="bg-primary h-2 rounded-full" :style="{ width: '66%' }"></div>
-          </div>
-          <span class="text-gray-500 text-sm">66%</span>
+      <!-- 第2题页面 -->
+      <div v-show="currentPage === 2" class="p-6 min-h-screen">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
         </div>
-        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-4">你更倾向于哪种设计风格？</h3>
-          <div class="space-y-3">
-            <label 
-              v-for="option in q2Options" 
-              :key="option.value" 
-              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-600 bg-blue-50': q2 === option.value }"
-            >
-              <input 
-                type="radio" 
-                name="q2" 
-                :value="option.value" 
-                v-model="q2" 
-                class="mt-1 accent-blue-600" 
-                @change="updateProgress"
-              >
-              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
+          <h3 class="text-xl font-semibold mb-6">你更倾向于哪种设计风格？</h3>
+          <div class="flex flex-col space-y-3">
+            <label v-for="option in q2Options" :key="option.value"
+              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-700 bg-blue-50': q2 === option.value }">
+              <input type="radio" name="q2" :value="option.value" v-model="q2" class="mr-4 accent-blue-700"
+                @change="updateProgress">
+              <span class="font-medium flex-1">{{ option.text }}</span>
             </label>
           </div>
         </div>
-        
-        <button 
-          @click="handleNext(3)" 
-          :disabled="!q2" 
-          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
-        >
+        <button @click="handleNext(3)" :disabled="!q2"
+          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300">
           下一步 <i class="fa-solid fa-arrow-right ml-2"></i>
         </button>
       </div>
 
-      <!-- 第3题 -->
-      <div v-show="currentPage === 3">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-bold text-primary">第{{ currentPage }}题 / 3题</h2>
-          <div class="w-full max-w-md mx-4 bg-gray-200 rounded-full h-2">
-            <div class="bg-primary h-2 rounded-full" :style="{ width: '100%' }"></div>
-          </div>
-          <span class="text-gray-500 text-sm">100%</span>
+      <!-- 第3题页面 -->
+      <div v-show="currentPage === 3" class="p-6 min-h-screen">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-xl font-bold text-primary m-0">第{{ currentPage }}题 / 3题</h2>
         </div>
-        
         <div class="mb-8">
-          <h3 class="text-xl font-semibold mb-4">你通常需要设计的频率是？</h3>
-          <div class="space-y-3">
-            <label 
-              v-for="option in q3Options" 
-              :key="option.value" 
-              class="flex items-start p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-600 hover:bg-blue-50 transition-all duration-300"
-              :class="{ 'border-blue-600 bg-blue-50': q3 === option.value }"
-            >
-              <input 
-                type="radio" 
-                name="q3" 
-                :value="option.value" 
-                v-model="q3" 
-                class="mt-1 accent-blue-600" 
-                @change="updateProgress"
-              >
-              <span class="ml-3 font-medium flex-1 break-words">{{ option.text }}</span>
+          <h3 class="text-xl font-semibold mb-6">你通常需要设计的频率是？</h3>
+          <div class="flex flex-col space-y-3">
+            <label v-for="option in q3Options" :key="option.value"
+              class="flex items-center w-full p-4 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-blue-700 hover:bg-blue-50 transition-all duration-300"
+              :class="{ 'border-blue-700 bg-blue-50': q3 === option.value }">
+              <input type="radio" name="q3" :value="option.value" v-model="q3" class="mr-4 accent-blue-700"
+                @change="updateProgress">
+              <span class="font-medium flex-1">{{ option.text }}</span>
             </label>
           </div>
         </div>
-        
-        <button 
-          @click="handleSubmit" 
-          :disabled="!q3" 
-          class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md"
-        >
+        <button @click="handleSubmit" :disabled="!q3"
+          class="w-full bg-blue-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300">
           获取结果 <i class="fa-solid fa-magic ml-2"></i>
         </button>
       </div>
     </div>
 
-    <!-- 结果页面 -->
+    <!-- 结果页面（关键修改区域） -->
     <div v-show="currentPage === 4" class="result-screen p-6 min-h-screen text-center">
-      <div class="pt-8">
-        <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i class="fa-solid fa-star text-3xl text-primary"></i>
-        </div>
-        <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
-        <p class="text-gray-600 mb-4">根据你的选择，我们为你推荐以下创意类型</p>
-        
-        <div 
-          v-if="result" 
-          class="bg-white border border-gray-100 rounded-xl shadow-lg p-6 mb-8 transform transition-all duration-500 hover:scale-[1.02]"
-        >
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ result.tag || '新媒体运营打工人' }}</h3>
-          <p class="text-gray-600 text-base mb-6">{{ result.desc || '公众号封面图、小红书图文、微博长图，内置平台合规尺寸模板' }}</p>
-          
-          <a 
-            :href="result.link || '#'" 
-            target="_blank" 
-            class="inline-block bg-gradient-to-r from-cyan-500 to-green-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:from-cyan-600 hover:to-green-600 transition-all duration-300 hover:scale-105"
-          >
-            查看专属模板 <i class="fa-solid fa-arrow-right ml-2"></i>
-          </a>
-        </div>
-        
-        <div class="space-y-4 mb-8">
-          <p class="text-gray-500 text-sm">你可能也喜欢：</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-              <i class="fa-solid fa-file-text text-primary mb-1"></i>
-              <p class="text-xs">简历模板</p>
-            </a>
-            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-              <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
-              <p class="text-xs">PPT模板</p>
-            </a>
-            <a href="#" target="_blank" class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
-              <i class="fa-brands fa-weixin text-primary mb-1"></i>
-              <p class="text-xs">朋友圈</p>
-            </a>
-          </div>
-        </div>
-        
-        <button 
-          @click="restartTest" 
-          class="inline-block bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-3 px-6 rounded-full hover:from-indigo-600 hover:to-blue-600 transition-all duration-300 shadow-md"
-        >
-          <i class="fa-solid fa-rotate-left mr-2"></i> 重新测试
-        </button>
+      <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+        <i class="fa-solid fa-star text-3xl text-primary"></i>
       </div>
-      
-      <div class="support mt-8">
-        <p class="support-desc">由Canva提供技术支持</p>
-        <img :src="imgPath" class="support-img" alt="技术支持图标">
+      <h2 class="text-2xl font-bold text-primary mb-2">恭喜完成测试！</h2>
+      <p class="text-gray-600 mb-4">根据你的选择，我们为你推荐以下创意类型</p>
+
+      <!-- 结果卡片 -->
+       <!-- 路径简化 -->
+      <div v-if="result"
+        class="bg-white rounded-lg shadow-md p-4 mb-6 transform transition-all duration-300 hover:scale-102"
+        id="resultCard">
+       <img
+  :src="result.imageId ? require(`@/assets/img/${result.imageId}`) : require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo Static and Animations/Canva-CN-Gradient.gif')"  
+  alt="创意类型"
+  class="w-full h-36 object-cover rounded-lg mb-3"  
+><!-- 图片高度调整 -->
+        <h3 class="text-lg font-bold text-gray-800 mb-1">{{ result.tag || '你的创意标签' }}</h3>
+        <p class="text-sm text-gray-600 mb-4">{{ result.desc || '点击下方按钮查看专属设计模板' }}</p>
+        <a :href="result.link || '#'" target="_blank"
+          class="bg-gradient-to-r from-cyan-500 to-green-500 text-white font-medium py-2 px-4 rounded-md shadow-sm hover:scale-105">
+          查看专属模板 <i class="fa-solid fa-arrow-right text-sm ml-1"></i>
+        </a>
       </div>
+
+      <!-- 推荐内容和重新测试按钮（删除外层容器） -->
+      <p class="text-gray-500 text-sm mb-3 mt-8">你可能也喜欢：</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        <a href="https://www.canva.cn/templates/search/简历/" target="_blank"
+          class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+          <i class="fa-solid fa-file-text text-primary mb-1"></i>
+          <p class="text-xs">简历模板</p>
+        </a>
+        <a href="https://www.canva.cn/templates/search/PPT/" target="_blank"
+          class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+          <i class="fa-solid fa-presentation-screen text-primary mb-1"></i>
+          <p class="text-xs">PPT模板</p>
+        </a>
+        <a href="https://www.canva.cn/templates/search/朋友圈配图/" target="_blank"
+          class="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors">
+          <i class="fa-brands fa-weixin text-primary mb-1"></i>
+          <p class="text-xs">朋友圈</p>
+        </a>
+      </div>
+
+      <button @click="restartTest"
+        class="bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-md hover:bg-gray-300">
+        <i class="fa-solid fa-rotate-left mr-1"></i> 重新测试
+      </button>
+    </div>
+
+    <!-- 技术支持（保持原代码） -->
+    <div class="support mt-8">
+      <p class="support-desc">由Canva提供技术支持</p>
+      <img :src="imgPath" class="support-img" alt="技术支持图标">
     </div>
   </div>
 </template>
@@ -219,19 +165,15 @@
   }
 }
 
-.space-y-4 {
-  margin-top: 0;
-  /* 重置间距 */
-}
-
 #resultCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px;
+  padding: 20px; /* 内边距适当减少 */
   /* 减少内边距，使卡片不臃肿 */
   margin-bottom: 16px;
   /* 调整与下方内容间距 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* 弱化阴影 */
 }
 
 #resultCard img {
@@ -239,7 +181,8 @@
   height: 200px;
   /* 可根据实际调整图片高度 */
   object-fit: cover;
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px 8px 0 0; height: 144px; /* h-36 对应 144px（假设设计稿单位为 4px=1rem） */
+    border-radius: 12px; /* 统一圆角 */
   /* 仅顶部圆角 */
   margin-bottom: 12px;
 }
@@ -549,75 +492,76 @@ export default {
           tag: "校园活动海报刚需党",
           desc: "适合社团招新、讲座宣传、运动会海报，3分钟快闪模板一键套用",
           link: "https://www.canva.cn/templates/search/校园海报/",
-          imageId: 26
+          imageId: "26.png"//school-activity
         },
         {
           tag: "简历美化强迫症患者",
           desc: "适配实习/校招/留学简历，高颜值模板覆盖极简风/创意风/商务风",
           link: "https://www.canva.cn/templates/search/简历/",
-          imageId: 28
+          imageId: "28.png"
         },
         {
           tag: "朋友圈美学大师",
           desc: "节日祝福、日常plog、生日九宫格，自带高级滤镜和文案排版模板",
           link: "https://www.canva.cn/templates/search/朋友圈配图/",
-          imageId: 29
+          imageId: "29.png"
         },
         {
           tag: "PPT拖延症晚期患者",
           desc: "课程汇报/答辩/小组作业PPT，动态图表+一键换色模板拯救DDL",
           link: "https://www.canva.cn/templates/search/PPT/",
-          imageId: 30
+          imageId: "30.png"
         },
         {
           tag: "电商创业萌新店主",
           desc: "商品主图、详情页、促销海报，支持一键导出电商平台尺寸",
           link: "https://www.canva.cn/templates/search/电商设计/",
-          imageId: 31
+          imageId: "31.png"
         },
         {
           tag: "手账素材收集控",
           desc: "电子手账、日程表、读书笔记模板，支持自由拖拽排版",
           link: "https://www.canva.cn/templates/search/手账/",
-          imageId: 32
+          imageId: "32.png"
         },
         {
           tag: "短视频封面制造机",
           desc: "抖音/小红书/B站封面，自动适配9:16/16:9等平台尺寸",
           link: "https://www.canva.cn/templates/search/视频封面/",
-          imageId: 33
+          imageId: "33.gif"
         },
         {
           tag: "节日仪式感狂魔",
           desc: "生日贺卡、节日海报、祝福表情包，含动态贴纸和艺术字体",
           link: "https://www.canva.cn/templates/search/节日设计/",
-          imageId: 34
+          imageId: "34.png"
         },
         {
           tag: "学习笔记整理达人",
           desc: "思维导图、错题本、课程表模板，支持导出PDF/图片分享",
           link: "https://www.canva.cn/templates/search/学习笔记/",
-          imageId: 35
+          imageId: "35.png"
         },
         {
           tag: "职场新人效率党",
           desc: "周报/月报/工作计划表，含数据可视化图表和商务配色方案",
           link: "https://www.canva.cn/templates/search/职场文档/",
-          imageId: 36
+          imageId: "36.png"
         },
         {
           tag: "新媒体运营打工人",
           desc: "公众号封面图、小红书图文、微博长图，内置平台合规尺寸模板",
           link: "https://www.canva.cn/templates/search/新媒体运营/",
-          imageId: 37
+          imageId: "37.png"
         },
         {
           tag: "生活美学践行者",
           desc: "家居装饰画、菜单设计、旅行手账，主打文艺清新风格模板",
           link: "https://www.canva.cn/templates/search/生活设计/",
-          imageId: 38
+          imageId: "38.png"
         }
       ],
+      // 题目选项
       q1Options: [
         { value: 'A', text: '校园活动宣传（海报、传单等）' },
         { value: 'B', text: '社交媒体分享（朋友圈、短视频封面）' },
@@ -640,7 +584,7 @@ export default {
       this.isFlipped = !this.isFlipped;
     },
     startTest() {
-      this.currentPage = 1; // 切换到第1题
+      this.currentPage = 1;
       this.isFlipped = false;
     },
     handleNext(page) {
@@ -651,9 +595,9 @@ export default {
       }
     },
     handleSubmit() {
-      // 计算结果并跳转至结果页
       const resultIndex = this.calculateResult();
-      this.result = this.userTags[resultIndex];
+      // 确保获取有效标签（防止索引越界）
+      this.result = this.userTags[resultIndex] || this.userTags[0]; // 默认为第一个标签
       this.currentPage = 4;
     },
     calculateResult() {
@@ -665,9 +609,9 @@ export default {
       } else if (this.q1 === 'C' && this.q3 === 'C') {
         resultIndex = 3;
       } else if (this.q1 === 'C' && this.q3 === 'B') {
-        resultIndex = 9;
+        resultIndex = 9; // userTags 索引9对应 "职场新人效率党"
       } else if (this.q1 === 'B' && this.q3 === 'A') {
-        resultIndex = 6;
+        resultIndex = 6; // userTags 索引6对应 "短视频封面制造机"
       } else {
         resultIndex = Math.floor(Math.random() * this.userTags.length);
       }
@@ -679,7 +623,17 @@ export default {
       this.isFlipped = false;
       this.q1 = this.q2 = this.q3 = null;
       this.result = {};
-      // 移除了进度条更新
+    },
+    // 动态加载图片（自动处理 GIF/PNG）
+    getImagePath(imageId) {
+      try {
+        // 假设图片路径为@/assets/img/{imageId}
+        return require(`@/assets/img/${imageId}`);
+      } catch (error) {
+        console.error(`图片加载失败: ${imageId}`, error);
+        // 回退到默认图片（可选）
+        return require('@/assets/Canva-Theme-based-Design Materials-3.3/Logo Static and Animations/Canva-CN-Gradient.gif');
+      }
     }
   }
 };
