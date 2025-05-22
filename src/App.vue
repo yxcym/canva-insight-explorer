@@ -474,7 +474,7 @@ button:hover {
 </style>
 
 <script>
-import imgUrl from '@/assets/img/Free-fall.jpg';
+import imgUrl from '@/assets/img/Free-fall-fuzzy-ver..jpg';
 
 export default {
   data() {
